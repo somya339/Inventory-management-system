@@ -4,6 +4,10 @@ const Entities = require('html-entities').AllHtmlEntities;
 const entities = new Entities();
 const ejs = require('ejs');
 
+function sanitizer(string) {
+    string = entities.encode(string);
+    return string;
+}
 
 function today() {
     var date = new Date();
@@ -15,10 +19,6 @@ function today() {
     return format;
 };
 
-function sanitizer(string) {
-    string = entities.encode(string);
-    return string;
-}
 //getting to the index
 exports.index = (req, res) => {
     res.render('index');
