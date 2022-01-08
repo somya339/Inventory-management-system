@@ -20,22 +20,22 @@ function sanitizer(string) {
     return string;
 }
 //getting to the index
-app.get('/index', (req, res) => {
+exports.index = (req, res) => {
     res.render('index');
-});
+};
 //getting addmaterial page
-app.get('/addmaterial', (req, res) => {
+exports.addmaterial = (req, res) => {
     res.render('addmaterial');
-});
+};
 //getting editmaterial page
-app.get('/editmaterial/:id', (req, res) => {
+exports.editmaterial = (req, res) => {
     var id = req.params.id;
     res.render('editmaterial', {
         id: id
     });
-});
+};
 //getting materials
-app.get('/materials', (req, res) => {
+exports.materials = (req, res) => {
     Material.getMaterials((err, materials) => {
         if (err) {
             res.render('material', {
@@ -48,9 +48,9 @@ app.get('/materials', (req, res) => {
             });
         }
     })
-});
+};
 // add the materials 
-app.post('/addmaterial', (req, res) => {
+exports.postaddmaterial = (req, res) => {
     var name = entities.encode(req.body.name);
     var price = entities.encode(req.body.price);
     var qty = entities.encode(req.body.qty);
@@ -74,9 +74,9 @@ app.post('/addmaterial', (req, res) => {
         //});
         res.redirect('/materials');
     });
-});
+}
 // update the material data
-app.post('/editmaterial/:id', (req, res) => {
+exports.posteditmaterial = (req, res) => {
     var id = req.params.id;
     var name = entities.encode(req.body.name);
     var price = entities.encode(req.body.price);
@@ -99,9 +99,9 @@ app.post('/editmaterial/:id', (req, res) => {
         // res.render('editmaterial' ,{ id:id ,msg:"Successfully updated!!"} );
         res.redirect('/materials');
     });
-});
+};
 //delete the data of materials
-app.post('/deletematerial/:_id', (req, res) => {
+exports.postdeletematerial = (req, res) => {
     var id = req.params._id;
     Material.removeMaterial(id, (err, callback) => {
         if (err) {
@@ -109,8 +109,8 @@ app.post('/deletematerial/:_id', (req, res) => {
         }
         res.redirect('/materials');
     });
-});
-app.post('/showmaterials/:id', (req, res) => {
+};
+exports.postshowmaterials = (req, res) => {
     var id = req.params.id;
     Material.findbyid(id, (err, materials) => {
         if (err) {
@@ -121,19 +121,19 @@ app.post('/showmaterials/:id', (req, res) => {
             obj: obj
         });
     });
-});
+};
 //--------------------------------------------------
-app.get('/addsupplier', (req, res) => {
+exports.addsupplier = (req, res) => {
     res.render('addsupplier');
-});
-app.get('/editsupplier/:id', (req, res) => {
+};
+exports.editsupplier = (req, res) => {
     var id = req.params.id;
     res.render('editsupplier', {
         id: id
     });
-});
+};
 // finds the suppliers
-app.get('/suppliers', (req, res) => {
+exports.suppliers = (req, res) => {
     Suppliers.getSuppliers((err, suppliers) => {
         if (err) {
             res.render('supplier', {
@@ -145,8 +145,8 @@ app.get('/suppliers', (req, res) => {
             obj: obj
         });
     });
-});
-app.post('/addsupplier', (req, res) => {
+};
+exports.postaddsupplier = (req, res) => {
     var cmpname = sanitizer(req.body.cmpname);
     var materialname = sanitizer(req.body.materialname);
     var state = sanitizer(req.body.state);
@@ -173,7 +173,7 @@ app.post('/addsupplier', (req, res) => {
         }
         res.redirect('/suppliers');
     })
-});
+};
 // //add suppliers
 // app.post('/addsupplier',(req ,res)=>{
 //     var supplier = req.body;
@@ -185,7 +185,7 @@ app.post('/addsupplier', (req, res) => {
 //     });
 // });
 //update the supplier data
-app.get('/showsupplier/:id', (req, res) => {
+exports.showsupplier = (req, res) => {
     var id = req.params.id;
     Suppliers.getSuppliersById(id, (err, supplier) => {
         if (err) {
@@ -196,8 +196,8 @@ app.get('/showsupplier/:id', (req, res) => {
             obj: obj
         });
     });
-});
-app.post('/editsupplier/:_id', (req, res) => {
+};
+exports.posteditsupplier = (req, res) => {
     var id = req.params._id;
     var cmpname = sanitizer(req.body.cmpname);
     var materialname = sanitizer(req.body.materialname);
@@ -225,9 +225,9 @@ app.post('/editsupplier/:_id', (req, res) => {
         }
         res.redirect('/suppliers');
     });
-});
+};
 //delete the data from supplier ...
-app.post('/deletesupplier/:_id', (req, res) => {
+exports.postdeletesupplier = (req, res) => {
     var id = req.params._id;
     Suppliers.removeSupplier(id, (err, callback) => {
         if (err) {
@@ -235,4 +235,4 @@ app.post('/deletesupplier/:_id', (req, res) => {
         }
         res.redirect('/suppliers');
     });
-});
+};
