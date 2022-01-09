@@ -44,7 +44,8 @@ router.route('/').get(authenticateToken, (req, res) => {
     Return: saved Photo object 
     Output: "Photo added!" if successful, "Something went wrong" if fail
 */
-router.route('/add').post(authenticateToken, multerupload.single('imagetoupload'), function (req, res) {
+// set authentication middle ware here
+router.route('/add').post(multerupload.single('image'), function (req, res) {
     console.log(req.file);
 
     try {

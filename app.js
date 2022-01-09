@@ -3,7 +3,7 @@ const app = express();
 const connect = require('./utils/DBconnection');
 const Router = require('./routes/mainRouter');
 
-
+require('dotenv').config("./config.env");
 
 app.set('view engine', 'ejs');
 app.use(express.json()); //parsing the application/json

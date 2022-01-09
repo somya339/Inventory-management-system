@@ -1,10 +1,14 @@
 // configures Cloudinary using credentials in .env
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config("../config.env");
 const cloudinary = require('cloudinary').v2;
+console.log(process.env.CLOUDINARY_NAME);
 cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
+    cloud_name: 'dhdsnakvg',
+    api_key: '759133781257655',
+    api_secret: 'UZ7QnfuB5cWDYaGR1kaYCm3pcaI'
 });
 
-module.exports = { cloudinary };
+module.exports = {
+    cloudinary
+};

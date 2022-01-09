@@ -1,7 +1,13 @@
 const Material = require('../models/material');
 const Suppliers = require('../models/supplier');
+const Photo = require("../models/photo.models");
 const Entities = require('html-entities').AllHtmlEntities;
 const entities = new Entities();
+const fs = require('fs');
+// import utilities
+const {
+    cloudinary
+} = require('../utils/cloudinary');
 
 function sanitizer(string) {
     string = entities.encode(string);
@@ -42,37 +48,77 @@ exports.materials = (req, res) => {
             });
         } else {
             var obj = materials;
-            res.render('material', {
-                obj: obj
-            });
+            Photo.findOne({
+                _id: obj[0].image
+            }).then(result => {
+                console.log(result);
+                res.render('material', {
+                    obj: obj,
+                    url: result.url
+                });
+            })
         }
     })
 };
 // add the materials 
-exports.postaddmaterial = (req, res) => {
+exports.postaddmaterial = async (req, res) => {
     var name = entities.encode(req.body.name);
     var price = entities.encode(req.body.price);
-    var qty = entities.encode(req.body.qty);
+    var qty = entities.encode(req.body.quan);
     var state = entities.encode(req.body.state);
     var on = today();
-    Material.addMaterial({
-        name: name,
-        price: price,
-        qty: qty,
-        state: state,
-        created_on: on
-    }, (err, material) => {
-        if (err) {
-            res.render('addmaterial', {
-                msg: 'Please fill required details!'
+    console.log(name, price, qty, state);
+
+    try {
+        // Retrieve path to file from file input
+        const path = req.file.path;
+        console.log(path);
+        // Upload to Cloudinary
+        let result = await cloudinary.uploader.upload(path)
+        fs.rmSync(path);
+        // set Photo properties
+        console.log(result);
+        const username = req.body.name;
+        const filename = req.file.originalname;
+        const url = result.url;
+        const date = Date();
+
+        // create Photo object
+        const newPhoto = await Photo.create({
+            username,
+            filename,
+            url,
+            date,
+        });
+        console.log(newPhoto);
+        // save to MongoDB database
+        Material.addMaterial({
+            name: name,
+            price: price,
+            qty: qty,
+            state: state,
+            image: newPhoto,
+            created_on: on
+        }, (err, material) => {
+            if (err) {
+                return res.render('addmaterial', {
+                    msg: 'Please fill required details!'
+                })
+            }
+            var obj = material;
+            // res.render('addmaterial' , {
+            //     msg:'successfully submit!!'
+            //});
+            res.status(200).send({
+                status: "success"
             })
-        }
-        var obj = material;
-        // res.render('addmaterial' , {
-        //     msg:'successfully submit!!'
-        //});
-        res.redirect('/materials');
-    });
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            err: 'Something went wrong'
+        });
+    }
 }
 // update the material data
 exports.posteditmaterial = (req, res) => {

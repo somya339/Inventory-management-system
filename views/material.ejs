@@ -1,5 +1,4 @@
-<%- include("./includes/navbar.ejs"); %> 
-
+<%- include("./includes/navbar.ejs"); %>
 
 <div class="container">
   <br />
@@ -8,6 +7,7 @@
     <thead>
       <tr>
         <th>Name</th>
+        <th>Preview</th>
         <th>State</th>
         <th>Price(per-kg)</th>
         <th>Quantity(unit(s))</th>
@@ -19,6 +19,7 @@
       <% obj.forEach(function(object){%>
       <tr>
         <td><%= object.name %></td>
+        <td><img src="<%= url%>" alt="preview" /></td>
         <td><%= object.state %></td>
         <td>$&nbsp;<%= object.price %></td>
         <td><%= object.qty %></td>

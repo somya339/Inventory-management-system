@@ -9,5 +9,5 @@ const connect = async () => {
         return err
     });
 }
-
+mongoose.set('useCreateIndex', true);
 module.exports = connect;

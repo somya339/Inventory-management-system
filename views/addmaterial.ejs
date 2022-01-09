@@ -3,7 +3,7 @@
 <div class="container">
   <br />
   <a href="materials" class="btn green">Go Back</a>
-  <form action="/addmaterial"  method="POST">
+  <form action="/addmaterial" id="material-form"  method="POST" enctype="multipart/form-data">
     <div class="col s12 m6">
       <div class="card black-text text-darken-2">
         <div class="card-content">
@@ -11,14 +11,14 @@
           <span class="card-title blue-text">Add Material</span>
           <div class="row">
             <div class="input-field col s12">
-              <input id="text" type="text" name="name" />
+              <input id="text" type="text" name="name" required />
               <label for="text">Material Name</label>
             </div>
           </div>
           <div class="row">
             <div class="input-field col  s12">
               <span for="image">Image</span>
-              <input id="image" type="file" name="name" accept="image/png, image/jpeg"/>
+              <input id="image" type="file" name="name" accept="image/png, image/jpeg" required/>
             </div>
           </div>
           <label>Material Type</label>
@@ -31,11 +31,11 @@
           <div class="col s12 row">
             <div class="col s6">
               <label>Price(per kg)</label>
-              <input type="number" placeholder="$0.0" name="price" />
+              <input type="number" placeholder="$0.0" name="price" required />
             </div>
             <div class="col s6">
               <label>Quantity(unit(s))</label>
-              <input type="number" placeholder="0" name="qty" />
+              <input type="number" placeholder="0" name="qty" required />
             </div>
           </div>
           <input type="submit" class="btn blue" value="submit" />
@@ -44,4 +44,5 @@
     </div>
   </form>
 </div>
+<script src="js/material.form.js"></script>
 <%- include("./includes/footer.ejs")%>

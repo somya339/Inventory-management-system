@@ -1,12 +1,14 @@
 const express = require('express');
 const cors = require('cors');
 const env = require('dotenv');
+env.config();
 const app = express();
 const connect = require('./utils/DBconnection');
 const Router = require('./routes/mainRouter');
 const photosRouter = require('./routes/photosRouter');
 const usersRouter = require('./routes/users')
 const port = process.env.PORT || 5000;
+const path = require('path');
 
 app.set('view engine', 'ejs');
 app.use(express.json()); //parsing the application/json
@@ -14,8 +16,7 @@ app.use(express.urlencoded({
     extended: true
 })); //parses the x-www-form-urlencoded
 app.use(cors());
-env.config();
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 
 // let uri = process.env.MONGO_URI;
 // console.log(uri);
@@ -29,7 +30,7 @@ app.use(express.static("public"));
 // })
 
 
-app.use('/', Router);
+app.use(Router);
 app.use('/photos', photosRouter);
 app.use('/users', usersRouter);
 connect().then(result => {

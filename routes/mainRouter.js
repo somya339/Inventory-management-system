@@ -1,12 +1,17 @@
 const Router = require('express').Router();
 const controler = require('../controller/mainController');
+const {
+    multerupload
+} = require('../utils/multer')
 //getting to the index
 Router.get('/index', controler.index);
 //getting addmaterial page
 Router.get('/addmaterial', controler.addmaterial);
-Router.post('/addmaterial', controler.postaddmaterial);
+//post data to addmaterial page
+Router.post('/addmaterial', multerupload.single('image'), controler.postaddmaterial);
 //getting editmaterial page
 Router.get('/editmaterial/:id', controler.editmaterial);
+//post data to editmaterial page
 Router.post('/editmaterial/:id', controler.posteditmaterial);
 //getting materials
 Router.get('/materials', controler.materials);
