@@ -2,7 +2,6 @@ const Material = require('../models/material');
 const Suppliers = require('../models/supplier');
 const Entities = require('html-entities').AllHtmlEntities;
 const entities = new Entities();
-const ejs = require('ejs');
 
 function sanitizer(string) {
     string = entities.encode(string);
