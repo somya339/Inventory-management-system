@@ -4,6 +4,7 @@ const Photo = require("../models/photo.models");
 const Entities = require('html-entities').AllHtmlEntities;
 const entities = new Entities();
 const fs = require('fs');
+const csvWriter = require('csv-writer').createObjectCsvWriter;
 // import utilities
 const {
     cloudinary
@@ -74,7 +75,9 @@ exports.postaddmaterial = async (req, res) => {
         const path = req.file.path;
         console.log(path);
         // Upload to Cloudinary
-        let result = await cloudinary.uploader.upload(path)
+        let result = await cloudinary.uploader.upload(path, {
+            use_filename: true
+        })
         fs.rmSync(path);
         // set Photo properties
         console.log(result);
@@ -121,7 +124,7 @@ exports.postaddmaterial = async (req, res) => {
     }
 }
 // update the material data
-exports.posteditmaterial = (req, res) => {
+exports.posteditmaterial = async (req, res) => {
     var id = req.params.id;
     var name = entities.encode(req.body.name);
     var price = entities.encode(req.body.price);
@@ -129,11 +132,25 @@ exports.posteditmaterial = (req, res) => {
     var state = entities.encode(req.body.state);
     //for creating date
     var on = today();
+    await Photo.deleteOne({
+        _id: id
+    })
+    const username = req.body.name;
+    const filename = req.file.originalname;
+    const url = result.url;
+    const date = Date();
+    let photo = await Photo.create({
+        username,
+        filename,
+        url,
+        date,
+    })
     Material.updateMaterial(id, {
         name: name,
         price: price,
         qty: qty,
         state: state,
+        image: photo,
         created_on: on
     }, {}, (err, callback) => {
         if (err) {
@@ -162,9 +179,14 @@ exports.postshowmaterials = (req, res) => {
             throw err;
         }
         var obj = materials;
-        res.render('showmaterials', {
-            obj: obj
-        });
+        Photo.findOne({
+            _id: obj.image
+        }).then(result => {
+            res.render('showmaterials', {
+                obj: obj,
+                url: result.url
+            });
+        })
     });
 };
 //--------------------------------------------------
@@ -281,3 +303,22 @@ exports.postdeletesupplier = (req, res) => {
         res.redirect('/suppliers');
     });
 };
+
+// download data as csv 
+exports.createCsv = async (req, res) => {
+    Material.find({}).then(result => {
+        let csvObj = csvWriter({
+            path: "../uploads/data.csv"
+        });
+        csvObj.writeRecords(result).then((data) => {
+            res.status(401).send({
+                success: true
+            })
+
+        }).catch((err) => {
+            res.status(500).send({
+                success: false
+            })
+        });
+    })
+}

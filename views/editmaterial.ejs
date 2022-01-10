@@ -1,19 +1,32 @@
-<%- include("./includes/navbar.ejs"); %> 
-
+<%- include("./includes/navbar.ejs"); %>
 
 <div class="container">
   <br />
   <a href="../materials" class="btn green">Go Back</a>
-  <form action="/editmaterial/<%= id %>" method="POST">
+  <form id="#material-form" action="/editmaterial/<%= id %>" method="POST">
     <div class="col s12 m6">
       <div class="card black-text text-darken-2">
         <div class="card-content">
           <h5 class="grey-text"><%= typeof msg !='undefined' ? msg : '' %></h5>
-          <span class="card-title blue-text">Edit Material</span>
+          <span id="identifier" class="card-title blue-text"
+            >Edit Material</span
+          >
           <div class="row">
             <div class="input-field col s12">
               <input id="text" type="text" name="name" />
               <label for="text">Material Name</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              <span for="image" style="color: c1b1b0">Image</span>
+              <input
+                id="image"
+                type="file"
+                name="name"
+                accept="image/png, image/jpeg"
+                required
+              />
             </div>
           </div>
           <label>Material Type</label>
@@ -39,5 +52,6 @@
     </div>
   </form>
 </div>
+<script src="js/material.form.js"></script>
 
 <%- include("./includes/footer.ejs")%>
