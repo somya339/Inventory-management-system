@@ -35,5 +35,7 @@ Router.get('/editsupplier/:id', controller.editsupplier);
 Router.post('/deletesupplier/:_id', controller.postdeletesupplier);
 // download all data as csv
 Router.post('/createcsv', controller.createCsv)
+// unlink csv from project structure after download
+Router.post('/cleardata', controller.removeCsv);
 
 module.exports = Router;

@@ -3,6 +3,7 @@
 <div class="container">
   <br />
   <a href="/addsupplier" class="btn blue">add supplier</a>
+  <a href="" class="btn blue" id="csv2">CSV</a>
   <table class="striped">
     <%= typeof msg != 'undefined' ? msg : ''%>
     <thead>
@@ -41,4 +42,6 @@
     </tbody>
   </table>
 </div>
+<script src="./js/download_csv_supplier.js"></script>
+
 <%- include("./includes/footer.ejs")%>

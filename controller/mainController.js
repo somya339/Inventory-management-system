@@ -151,12 +151,11 @@ exports.posteditmaterial = async (req, res) => {
         const username = req.body.name;
         const filename = req.file.filename;
         const url = result.url;
-        let minified = "http://res.cloudinary.com/dhdsnakvg/image/upload/q_auto" + url.split("http://res.cloudinary.com/dhdsnakvg/image/upload/")[0];
         const date = Date();
         let photo = await Photo.create({
             username,
             filename,
-            minified,
+            url,
             date,
         })
         Material.updateMaterial(id, {
@@ -172,7 +171,6 @@ exports.posteditmaterial = async (req, res) => {
                     msg: "Error Occured."
                 });
             }
-            res.redirect('/materials')
         });
     } catch (err) {
         console.log(err.message);
@@ -180,6 +178,7 @@ exports.posteditmaterial = async (req, res) => {
             success: false
         })
     }
+    res.redirect('/materials')
 };
 //delete the data of materials
 exports.postdeletematerial = (req, res) => {
@@ -258,8 +257,8 @@ exports.postaddsupplier = (req, res) => {
         if (err) {
             throw err
         }
-        res.redirect('/suppliers');
     })
+    res.redirect('/suppliers');
 };
 // //add suppliers
 // app.post('/addsupplier',(req ,res)=>{
@@ -330,28 +329,78 @@ exports.postdeletesupplier = (req, res) => {
 
 // download data as csv 
 exports.createCsv = async (req, res) => {
-    Material.find({}).then(async result => {
-        try {
-            var flatUsers = result.map(function (user) {
-                return user.toObject();
-            })
-            var FinalVal = (flatUsers)
-            console.log(FinalVal);
-            const csv = new Parser();
-            const data = csv.parse(FinalVal, {
-                fields: ["_id", "username", "filename", "url", "date", "createdAT", "updatedAT", "__v"]
-            })
-            console.log(data);
-            fs.writeFileSync("./data.csv", data);
-            res.status(200).send({
-                status: "success"
-            })
+    console.log(req.body);
+    if (req.body.schema == "material") {
 
-        } catch (err) {
-            console.log(err);
-            return res.status(500).send({
-                success: false
+        Material.find({}).then(async result => {
+            try {
+                var flatUsers = result.map(function (user) {
+                    return user.toObject();
+                })
+                var FinalVal = (flatUsers)
+                console.log(FinalVal);
+                const csv = new Parser();
+                const data = csv.parse(FinalVal, {
+                    fields: ["_id", "username", "filename", "url", "date", "createdAT", "updatedAT", "__v"]
+                })
+                console.log(data);
+                fs.writeFileSync("./public/datamaterial.csv", data);
+                res.status(200).send({
+                    status: "success"
+                })
+
+            } catch (err) {
+                console.log(err);
+                return res.status(500).send({
+                    success: false
+                })
+            }
+        })
+    } else if (req.body.schema == "supplier") {
+        Suppliers.find({}).then(async result => {
+            try {
+                console.log(result);
+                if (result.length != 0) {
+                    var flatUsers = result.map(function (user) {
+                        return user.toObject();
+                    })
+                    var FinalVal = (flatUsers)
+                    console.log(FinalVal);
+                    const csv = new Parser();
+                    const data = csv.parse(FinalVal, {
+                        fields: ["_id", "cmpname", "materialname", "email", "address", "contactno", "state", "qty", "costprice", "create_on",
+                            "__v"
+                        ]
+                    })
+                    console.log(data);
+                    fs.writeFileSync("./public/dataSupplier.csv", data);
+                    res.status(200).send({
+                        status: "success"
+                    })
+                } else {
+                    return res.status(401).send({
+                        status: "data is empty"
+                    })
+                }
+            } catch (err) {
+                console.log(err);
+                return res.status(500).send({
+                    success: false
+                })
+            }
+        })
+    }
+}
+
+exports.removeCsv = (req, res) => {
+    fs.unlink("./public/data.csv", (err) => {
+        if (err) {
+            return res.send({
+                status: err.message
             })
         }
-    })
+        res.send({
+            status: "data cleared"
+        })
+    });
 }

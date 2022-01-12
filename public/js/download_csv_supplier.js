@@ -1,20 +1,20 @@
-const csvBtn = document.querySelector("#csv");
-var count1 = 0;
-csvBtn.addEventListener("click", e => {
+const csvBtn2 = document.querySelector("#csv2");
+var count2 = 0;
+csvBtn2.addEventListener("click", e => {
     fetch("http://localhost:5000/createcsv", {
         method: "POST",
         body: JSON.stringify({
-            schema: "material"
+            schema: "supplier"
         }),
         headers: {
             "Content-Type": "application/json"
         }
     }).then(async (result) => {
         console.log(result);
-        if (result.status == 200 && count1 < 1) {
-            csvBtn.href = "./datamaterial.csv";
-            csvBtn.download = "datamaterial.csv"
-            csvBtn.click();
+        if (result.status == 200 && count2 < 1) {
+            csvBtn2.href = "./dataSupplier.csv";
+            csvBtn2.download = "dataSupplier.csv"
+            csvBtn2.click();
             return count++;
 
         } else {
