@@ -9,7 +9,7 @@ Inventory management system for Logistics company
 # Hosting
 
 This Project is Hosted using Microsoft Azure
-Visit the project here => `https://shopify-backend-challange.azurewebsites.net/materials`
+Visit the project here /`https://shopify-backend-challange.azurewebsites.net/materials`
 
 ## Pre-requisites
 
