@@ -9,10 +9,10 @@ Router.get('/', controller.index);
 Router.get('/addmaterial', controller.addmaterial);
 //post data to addmaterial page
 Router.post('/addmaterial', multerupload.single('image'), controller.postaddmaterial);
+//post data to editmaterial page
+Router.post('/posteditmaterial/:id', multerupload.single('image'), controller.posteditmaterial);
 //getting editmaterial page
 Router.get('/editmaterial/:id', controller.editmaterial);
-//post data to editmaterial page
-Router.post('/editmaterial/:id', controller.posteditmaterial);
 //getting materials
 Router.get('/materials', controller.materials);
 // display materials 
@@ -27,10 +27,10 @@ Router.get('/showsupplier/:id', controller.showsupplier);
 Router.get('/suppliers', controller.suppliers);
 // post add supplier
 Router.post('/addsupplier', controller.postaddsupplier);
-// edit supplier details
-Router.get('/editsupplier/:id', controller.editmaterial);
 // post edit supplier details
-Router.post('/editsupplier/:_id', controller.posteditsupplier);
+Router.post('/posteditsupplier/:_id', controller.posteditsupplier);
+// edit supplier details
+Router.get('/editsupplier/:id', controller.editsupplier);
 //delete the data from supplier ...
 Router.post('/deletesupplier/:_id', controller.postdeletesupplier);
 // download all data as csv

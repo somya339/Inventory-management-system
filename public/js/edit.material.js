@@ -1,16 +1,15 @@
-const form = document.querySelector("#material-form");
-const identifier = document.querySelector("#identifier");
-// let data = new FormData();
-form.addEventListener("submit", async (e) => {
+const form1 = document.querySelector("#material-form");
+form1.addEventListener("submit", async (e) => {
     e.preventDefault();
     var myForm = new FormData();
+    console.log(e.srcElement);
     myForm.append("name", e.srcElement[0].value);
     myForm.append("image", e.srcElement[1].files[0]);
     myForm.append("state", e.srcElement[2].value);
     myForm.append("price", e.srcElement[3].value);
-    myForm.append("quan", e.srcElement[4].value);
+    myForm.append("qty", e.srcElement[4].value);
     try {
-        fetch("http://localhost:5000/addmaterial", {
+        fetch("http://localhost:5000/editmaterial", {
             method: "POST",
             body: myForm
         }).then((result) => {

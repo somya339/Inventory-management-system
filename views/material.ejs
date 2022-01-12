@@ -3,24 +3,30 @@
 <div class="container">
   <br />
   <a href="addmaterial" class="btn blue">add material</a>
+  <a href="./data.csv" download="data.csv" class="btn blue" id="csv">CSV</a>
   <table class="striped">
     <thead>
       <tr>
         <th>Name</th>
         <th>Preview</th>
         <th>State</th>
-        <th>Price(per-kg)</th>
+        <th>Price(/kg)</th>
         <th>Quantity(unit(s))</th>
-        <th>created on</th>
-        <th><input type="button" class="btn blue round" id="csv" value="CSV"></input></th>
-        <th></th>
+        <th>Created on</th>
+        <th>Options</th>
       </tr>
     </thead>
     <tbody>
-      <% obj.forEach(function(object){%>
+      <% obj.forEach(function(object, index){%>
       <tr>
         <td><%= object.name %></td>
-        <td><img src="<%= url %>" alt="preview" style="height: 100px;"/></td>
+        <td>
+          <img
+            src="<%= url[index] %>"
+            alt="preview"
+            style="height: 100px; width: 200px"
+          />
+        </td>
         <td><%= object.state %></td>
         <td>$&nbsp;<%= object.price %></td>
         <td><%= object.qty %></td>
@@ -46,6 +52,5 @@
   </table>
   <br /><br />
   <script src="./js/download_csv.js"></script>
-
 </div>
 <%- include("./includes/footer.ejs")%>

@@ -44,7 +44,7 @@ module.exports.updateMaterial = (id, material, option, callback) => {
         state: material.state,
         price: material.price,
         name: material.name,
-        image: matrial.image,
+        image: material.image,
         created_on: material.created_on
     }
     Material.findOneAndUpdate(query, update, material, callback);

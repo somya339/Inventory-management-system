@@ -1,14 +1,13 @@
 const csvBtn = document.querySelector("#csv");
-
+var count = 0;
 csvBtn.addEventListener("click", e => {
     fetch("http://localhost:5000/createcsv", {
         method: "POST"
-    }).then((result) => {
-        if (result.status == 401) {
-            e.target.download = "../../uploads/data.csv";
-            e.target.click();
+    }).then(async (result) => {
+        if (result.status == 200 && count < 1) {
+            return count++;
         } else {
-            console.log(result.message);
+            return console.log(result.message);
         }
     }).catch((err) => {
         console.log(err.message);

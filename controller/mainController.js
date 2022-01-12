@@ -4,11 +4,14 @@ const Photo = require("../models/photo.models");
 const Entities = require('html-entities').AllHtmlEntities;
 const entities = new Entities();
 const fs = require('fs');
-const csvWriter = require('csv-writer').createObjectCsvWriter;
+const {
+    Parser
+} = require('json2csv');
 // import utilities
 const {
     cloudinary
 } = require('../utils/cloudinary');
+const path = require('path');
 
 function sanitizer(string) {
     string = entities.encode(string);
@@ -42,25 +45,33 @@ exports.editmaterial = (req, res) => {
 };
 //getting materials
 exports.materials = (req, res) => {
-    Material.getMaterials((err, materials) => {
+    Material.getMaterials(async (err, materials) => {
         if (err) {
             res.render('material', {
                 msg: 'Error in getting details..'
             });
         } else {
             var obj = materials;
-            Photo.findOne({
-                _id: obj[0].image
-            }).then(result => {
-                console.log(result);
-                res.render('material', {
-                    obj: obj,
-                    url: result.url
-                });
-            })
+            let url = await getURL(obj);
+            res.render('material', {
+                obj: obj,
+                url: url
+            });
+
         }
     })
 };
+
+const getURL = async (obj) => {
+    let url = [];
+    for (let image of obj) {
+        let result = await Photo.findOne({
+            _id: image.image
+        })
+        url.push(result.url);
+    }
+    return url;
+}
 // add the materials 
 exports.postaddmaterial = async (req, res) => {
     var name = entities.encode(req.body.name);
@@ -95,29 +106,26 @@ exports.postaddmaterial = async (req, res) => {
         });
         console.log(newPhoto);
         // save to MongoDB database
-        Material.addMaterial({
+        Material.create({
             name: name,
             price: price,
             qty: qty,
             state: state,
-            image: newPhoto,
+            image: newPhoto._id,
             created_on: on
-        }, (err, material) => {
-            if (err) {
-                return res.render('addmaterial', {
-                    msg: 'Please fill required details!'
-                })
-            }
-            var obj = material;
-            // res.render('addmaterial' , {
-            //     msg:'successfully submit!!'
-            //});
+        }).then((material) => {
+            console.log(material);
             res.status(200).send({
                 status: "success"
             })
+        }).catch((err) => {
+            console.log(err.message);
+            return res.render('addmaterial', {
+                msg: 'Please fill required details!'
+            })
         });
     } catch (err) {
-        console.error(err);
+        console.error(err.message);
         res.status(500).json({
             err: 'Something went wrong'
         });
@@ -125,42 +133,53 @@ exports.postaddmaterial = async (req, res) => {
 }
 // update the material data
 exports.posteditmaterial = async (req, res) => {
-    var id = req.params.id;
     var name = entities.encode(req.body.name);
     var price = entities.encode(req.body.price);
     var qty = entities.encode(req.body.qty);
     var state = entities.encode(req.body.state);
-    //for creating date
-    var on = today();
-    await Photo.deleteOne({
-        _id: id
-    })
-    const username = req.body.name;
-    const filename = req.file.originalname;
-    const url = result.url;
-    const date = Date();
-    let photo = await Photo.create({
-        username,
-        filename,
-        url,
-        date,
-    })
-    Material.updateMaterial(id, {
-        name: name,
-        price: price,
-        qty: qty,
-        state: state,
-        image: photo,
-        created_on: on
-    }, {}, (err, callback) => {
-        if (err) {
-            res.render('editmaterial', {
-                msg: "Error Occured."
-            });
-        }
-        // res.render('editmaterial' ,{ id:id ,msg:"Successfully updated!!"} );
-        res.redirect('/materials');
-    });
+    console.log(name, price, qty, state);
+    try {
+        var id = req.params.id;
+        //for creating date
+        var on = today();
+        await Photo.deleteOne({
+            _id: id
+        })
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            use_filename: true
+        });
+        const username = req.body.name;
+        const filename = req.file.filename;
+        const url = result.url;
+        let minified = "http://res.cloudinary.com/dhdsnakvg/image/upload/q_auto" + url.split("http://res.cloudinary.com/dhdsnakvg/image/upload/")[0];
+        const date = Date();
+        let photo = await Photo.create({
+            username,
+            filename,
+            minified,
+            date,
+        })
+        Material.updateMaterial(id, {
+            name: name,
+            price: price,
+            qty: qty,
+            state: state,
+            image: photo,
+            created_on: on
+        }, {}, (err, callback) => {
+            if (err) {
+                return res.render('editmaterial', {
+                    msg: "Error Occured."
+                });
+            }
+            res.redirect('/materials')
+        });
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send({
+            success: false
+        })
+    }
 };
 //delete the data of materials
 exports.postdeletematerial = (req, res) => {
@@ -179,6 +198,7 @@ exports.postshowmaterials = (req, res) => {
             throw err;
         }
         var obj = materials;
+
         Photo.findOne({
             _id: obj.image
         }).then(result => {
@@ -265,7 +285,8 @@ exports.showsupplier = (req, res) => {
     });
 };
 exports.posteditsupplier = (req, res) => {
-    var id = req.params._id;
+    console.log(req.body);
+    var id = req.params._id
     var cmpname = sanitizer(req.body.cmpname);
     var materialname = sanitizer(req.body.materialname);
     var state = sanitizer(req.body.state);
@@ -286,12 +307,15 @@ exports.posteditsupplier = (req, res) => {
         qty: qty,
         created_on: on
     };
-    Suppliers.updateSupplier(id, supplier, {}, (err, supplier) => {
+    // console.log(supplier);
+    Suppliers.updateSupplier(id, supplier, {}, (err, data) => {
+        // console.log(err, data);
         if (err) {
+            console.log(err.message);
             throw err
         }
         res.redirect('/suppliers');
-    });
+    })
 };
 //delete the data from supplier ...
 exports.postdeletesupplier = (req, res) => {
@@ -306,19 +330,28 @@ exports.postdeletesupplier = (req, res) => {
 
 // download data as csv 
 exports.createCsv = async (req, res) => {
-    Material.find({}).then(result => {
-        let csvObj = csvWriter({
-            path: "../uploads/data.csv"
-        });
-        csvObj.writeRecords(result).then((data) => {
-            res.status(401).send({
-                success: true
+    Material.find({}).then(async result => {
+        try {
+            var flatUsers = result.map(function (user) {
+                return user.toObject();
+            })
+            var FinalVal = (flatUsers)
+            console.log(FinalVal);
+            const csv = new Parser();
+            const data = csv.parse(FinalVal, {
+                fields: ["_id", "username", "filename", "url", "date", "createdAT", "updatedAT", "__v"]
+            })
+            console.log(data);
+            fs.writeFileSync("./public/js/data.csv", data);
+            res.status(200).send({
+                status: "success"
             })
 
-        }).catch((err) => {
-            res.status(500).send({
+        } catch (err) {
+            console.log(err);
+            return res.status(500).send({
                 success: false
             })
-        });
+        }
     })
 }

@@ -1,17 +1,17 @@
-<%- include("./includes/navbar.ejs"); %> 
-
+<%- include("./includes/navbar.ejs"); %>
 
 <div class="container">
   <br />
   <a href="../materials" class="btn green">Go Back</a>
   <ul class="collection">
-    <li class="collection-item"><b><img src="<%= url %>"/></b></li>
+    <li class="collection-item">
+      <b><img src="<%= url %>" /></b>
+    </li>
     <li class="collection-item"><b>Material id</b><br /><%= obj._id%></li>
     <li class="collection-item"><b>Name</b><br /><%= obj.name%></li>
     <li class="collection-item"><b>State</b><br /><%= obj.state%></li>
     <li class="collection-item"><b>Price</b><br />$<%= obj.price%></li>
     <li class="collection-item"><b>Quantity</b><br /><%= obj.qty%></li>
-    <li class="collection-item"><b>Image</b><img src=<%= obj.image.url %>><br /><%= obj.qty%></li>
     <li class="collection-item">
       <b>Total expense</b><br />$&nbsp;<%= obj.price * obj.qty%>
     </li>

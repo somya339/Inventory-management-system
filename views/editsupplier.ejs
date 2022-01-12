@@ -1,10 +1,9 @@
-<%- include("./includes/navbar.ejs"); %> 
-
+<%- include("./includes/navbar.ejs"); %>
 
 <div class="container">
   <br />
   <a href="../suppliers" class="btn green">Go Back</a>
-  <form action="/editsupplier/<%= id %>" method="post">
+  <form id="form2" action="/posteditsupplier/<%= id %>" method="post">
     <div class="col s12 m6">
       <div class="card black-text text-darken-2">
         <div class="card-content">
@@ -12,16 +11,16 @@
           <span class="card-title blue-text">Edit Supplier</span>
           <div class="row">
             <div class="input-field col s6">
-              <input id="text" type="text" name="cmpname" />
+              <input id="text" type="text" name="cmpname" required />
               <label for="text">Company Name</label>
             </div>
             <div class="input-field col s3">
-              <input id="text" type="text" name="materialname" />
+              <input id="text" type="text" name="materialname" required />
               <label for="text">Material Name</label>
             </div>
             <div class="col s3">
               <label>Qty</label>
-              <input type="number" placeholder="0" name="qty" />
+              <input type="number" placeholder="0" name="qty" required />
             </div>
           </div>
           <div class="col s12 row">
@@ -31,15 +30,21 @@
                 type="email"
                 placeholder="example@gmail.com"
                 name="emailid"
+                required
               />
             </div>
             <div class="col s3">
               <label>Contact no.</label>
-              <input type="number" placeholder="1234567890" name="contactno" />
+              <input
+                type="number"
+                placeholder="1234567890"
+                name="contactno"
+                required
+              />
             </div>
             <div class="col s3">
               <label>Cost price</label>
-              <input type="number" placeholder="$0" name="costprice" />
+              <input type="number" placeholder="$0" name="costprice" required />
             </div>
           </div>
           <div class="col s12 row">
@@ -48,6 +53,7 @@
                 id="textarea1"
                 class="materialize-textarea"
                 name="address"
+                required
               ></textarea>
               <label for="textarea1">Address</label>
             </div>
@@ -65,5 +71,34 @@
     </div>
   </form>
 </div>
-
+<!-- <script>
+  const form1 = document.querySelector("#form2");
+  form1.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    var myForm = new FormData();
+    myForm.append("cmp_name", e.srcElement[0].value);
+    myForm.append("material", e.srcElement[1].vale);
+    myForm.append("qty", e.srcElement[2].value);
+    myForm.append("email", e.srcElement[3].value);
+    myForm.append("contact_no", e.srcElement[4].value);
+    myForm.append("cost", e.srcElement[5].value);
+    myForm.append("text", e.srcElement[6].value);
+    myForm.append("state", e.srcElement[7].value);
+    for (let [key, value] of myForm.entries()) {
+      console.log(key, value);
+    }
+    try {
+      fetch("http://localhost:5000/posteditsupplier/", {
+        method: "POST",
+        body: myForm,
+      }).then((result) => {
+        result.json().then((data) => {
+          console.log(data);
+        });
+      });
+    } catch (err) {
+      return console.log(err.message);
+    }
+  });
+</script> -->
 <%- include("./includes/footer.ejs")%>

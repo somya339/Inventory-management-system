@@ -11,10 +11,11 @@ const port = process.env.PORT || 5000;
 const path = require('path');
 
 app.set('view engine', 'ejs');
-app.use(express.json()); //parsing the application/json
+app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({
     extended: true
 })); //parses the x-www-form-urlencoded
+app.use(express.json()); //parsing the application/json
 app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
 
