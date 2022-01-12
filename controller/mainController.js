@@ -342,7 +342,7 @@ exports.createCsv = async (req, res) => {
                 fields: ["_id", "username", "filename", "url", "date", "createdAT", "updatedAT", "__v"]
             })
             console.log(data);
-            fs.writeFileSync("./public/js/data.csv", data);
+            fs.writeFileSync("./data.csv", data);
             res.status(200).send({
                 status: "success"
             })

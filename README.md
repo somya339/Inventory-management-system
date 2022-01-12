@@ -6,6 +6,11 @@ My code for the Summer 2022 - Shopify Backend Developer Intern Challenge
 
 Inventory management system for Logistics company
 
+# Hosting
+
+This Project is Hosted using Microsoft Azure
+Visit the project here => `https://shopify-backend-challange.azurewebsites.net/materials`
+
 ## Pre-requisites
 
 The following prerequisites are needed for compilation
@@ -27,7 +32,6 @@ ATLAS_URI=mongodb+srv://<username>:<password>@cluster0.edrpu.mongodb.net/<dbname
 CLOUDINARY_NAME=*********
 CLOUDINARY_API_KEY=***************
 CLOUDINARY_API_SECRET=***************************
-ACCESS_TOKEN_SECRET=70d088310be28ac7db7b997b8f2f83ac8bb5c757d66823bf487be9a2cb4d7ebd566c480d3ffab985d537f9043624a0a6b3b6956ee8208d351c1ecfc0d02ad23b
 ```
 
 3. Run `npm install` to install dependencies from package.json
@@ -55,7 +59,7 @@ password: String
 ```
 
 **Password ecryption** is performed using the bcrypt library when storing in database
-Right now, date is a parameter(e.g. `2021-01-01T03:07:01.028Z`). However, it is very easy to change it to be the current date.
+Right now, date is a parameter(e.g. `2022-01-09T03:07:01.028Z`). However, it is very easy to change it to be the current date.
 
 2. Photo Schema
 
@@ -69,20 +73,18 @@ date: Date
 - username is name of user logged in
 - name is name of photo, obtained from filename
 - url is URL provided by Cloudinary upon uploading
-- date is `Date` object, passed as parameter(e.g. `2021-01-01T03:07:01.028Z`)
+- date is `Date` object, passed as parameter(e.g. `2022-01-09T03:07:01.028Z`)
 
 ## Testing
 
 Testing is done using Postman.
 Logical Backend Flow is as follows:\
 
-- Users can **register** using the `localhost:5000/users/register` endpoint with `POST` request. JSON body is of format `{username: String, password:String}`
-- Users can then **login** using the `localhost:5000/users/login` endpoint with `POST` request. JSON body is of format `{username: String, password:String}`\
-  Login is successful only if password matches registration password
-- To access all the following, user must provide an **access token** as the Authorization Header. Access token must match json web token.
-- User can **upload** a photo using the `localhost:5000/photos/add` endpoint with `POST` request. User must input form data containing `date`(String) and `imagetoupload`(File)
-- User can **delete** a photo by using the `localhost:5000/photos/` endpoint with `DELETE` request. JSON body is of format `{name: String}`, where name is name of photo
-- User can **get** a list of all their files using the `localhost:5000/photos/` endpoint with `GET` request. JSON body is of format `{name: String}`. They have option of searching photos by filename by inputting a search query `{name: String}` in Postman body.
+- User **Interface** is provided which makes it eaiser for tesing
+- User can **upload** a photo using the `localhost:5000/postaddmaterails` endpoint with `POST` request.
+- User can **delete** a photo by using the `localhost:5000/deletematerials/` endpoint with `DELETE` request.
+- User can **get** a list of all their materails using the `localhost:5000/materials/` endpoint with `GET` request.
+- User can **get** a list of all their suppliers using the `localhost:5000/suppliers/` endpoint with `GET` request.
 
 ## Improvements for future
 
@@ -91,7 +93,7 @@ Logical Backend Flow is as follows:\
 - Bulk Operations
   - Currently user can upload and delete individual files, not bulk files
   - This is done for simplicity; but, we could change this by appropriate `multer` commands for upload and json body input for delete
-- Username and Password restrictions
-  - Currently, there is little restrictions that force a strong username or password, or to verify password on registration.
-  - Only restriction is minimum password length = 3
-  - To fix this, can add checks and restrictions on password length and whether user fields are empty
+- Restrictions on Information provided
+  - Currently, there are little restriction on the form fields
+  - Only restriction is NOT NULL data
+  - To fix this, can add checks and restrictions on length and whether data meets a certain criteria

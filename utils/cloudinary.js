@@ -1,6 +1,8 @@
 // configures Cloudinary using credentials in .env
 const path = require('path');
-require('dotenv').config("../config.env");
+require('dotenv').config({
+    path: path.join(__dirname, ".env")
+});
 const cloudinary = require('cloudinary').v2;
 console.log(process.env.CLOUDINARY_NAME);
 cloudinary.config({
