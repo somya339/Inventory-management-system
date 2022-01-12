@@ -1,10 +1,7 @@
 const express = require('express');
 const cors = require('cors');
-const env = require('dotenv');
+require('dotenv').config();
 const path = require('path');
-env.config({
-    path: path.join(__dirname, "./utils/.env")
-});
 const app = express();
 const connect = require('./utils/DBconnection');
 const Router = require('./routes/mainRouter');
