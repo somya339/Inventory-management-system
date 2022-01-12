@@ -3,17 +3,24 @@
 <div class="container">
   <br />
   <a href="addmaterial" class="btn blue">add material</a>
-  <a href="" class="btn blue" id="csv">CSV</a>
+  <a
+    href=""
+    class="btn blue"
+    id="csv"
+    data-toggle="tooltip"
+    title="To download more than file you need to give permission to the browser"
+    >CSV</a
+  >
 
   <table class="striped">
     <thead>
       <tr>
-        <th>Name</th>
+        <th id="name">Name</th>
         <th>Preview</th>
         <th>State</th>
-        <th>Price(/kg)</th>
-        <th>Quantity(unit(s))</th>
-        <th>Created on</th>
+        <th id="price">Price(/kg)</th>
+        <th id="qty">Quantity(unit(s))</th>
+        <th id="created">Created on</th>
         <th>Options</th>
       </tr>
     </thead>
@@ -53,5 +60,6 @@
   </table>
   <br /><br />
   <script src="./js/download_csv.js"></script>
+  <script src="./js/sort_data.js"></script>
 </div>
 <%- include("./includes/footer.ejs")%>

@@ -3,7 +3,14 @@
 <div class="container">
   <br />
   <a href="/addsupplier" class="btn blue">add supplier</a>
-  <a href="" class="btn blue" id="csv2">CSV</a>
+  <a
+    href=""
+    class="btn blue"
+    id="csv2"
+    data-toggle="tooltip"
+    title="To download more than file you need to give permission to the browser"
+    >CSV</a
+  >
   <table class="striped">
     <%= typeof msg != 'undefined' ? msg : ''%>
     <thead>

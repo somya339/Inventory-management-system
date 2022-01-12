@@ -3,7 +3,12 @@
 <div class="container">
   <br />
   <a href="/materials" class="btn green">Go Back</a>
-  <form id="form1" enctype="application/x-www-form-urlencoded">
+  <form
+    id="form1"
+    action="http://localhost:5000/posteditmaterial/<%= id %>"
+    method="post"
+    enctype="multipart/form-data"
+  >
     <div class="col s12 m6">
       <div class="card black-text text-darken-2">
         <div class="card-content">
@@ -52,28 +57,4 @@
     </div>
   </form>
 </div>
-<script>
-  const form1 = document.querySelector("#form1");
-  form1.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    var myForm = new FormData();
-    myForm.append("name", e.srcElement[0].value);
-    myForm.append("image", e.srcElement[1].files[0]);
-    myForm.append("state", e.srcElement[2].value);
-    myForm.append("price", e.srcElement[3].value);
-    myForm.append("quan", e.srcElement[4].value);
-    try {
-      fetch("http://localhost:5000/posteditmaterial/<%= id %>", {
-        method: "POST",
-        body: myForm,
-      }).then((result) => {
-        result.json().then((data) => {
-          console.log(data);
-        });
-      });
-    } catch (err) {
-      return console.log(err.message);
-    }
-  });
-</script>
 <%- include("./includes/footer.ejs")%>

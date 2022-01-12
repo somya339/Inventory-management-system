@@ -1,6 +1,6 @@
 const form = document.querySelector("#material-form");
 const identifier = document.querySelector("#identifier");
-// let data = new FormData();
+// var tableData;
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
     var myForm = new FormData();
@@ -15,7 +15,7 @@ form.addEventListener("submit", async (e) => {
             body: myForm
         }).then((result) => {
             result.json().then(data => {
-                console.log(data);
+                tableData = data;
             })
         })
     } catch (err) {

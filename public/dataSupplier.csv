@@ -1,4 +1,4 @@
 "_id","cmpname","materialname","state","emailid","contactno","address","costprice","qty","created_on","__v"
 "61ded1a42af7c422dc354fd8","PlayMan","Luxuary","solid","somyagupta746@gmail.com",9876543210,"india",11,99,"18:3:32 Wed Jan 12 2022",0
-"61ded2ab04ac351514d7b558","PlayMan","Luxuary","solid","somyagupta746@gmail.com",9876543210,"india",11,99,"18:7:55 Wed Jan 12 2022",0
-"61ded2e504ac351514d7b55a","PlayMan","Luxuary","solid","somyagupta746@gmail.com",9876543210,"India",11,99,"18:8:53 Wed Jan 12 2022",0
+"61ded2ab04ac351514d7b558","PlayBoy","Zara","solid","somyagupta@gmail.com",65432109876,"USA",11,143,"18:7:55 Wed Jan 12 2022",0
+"61ded46612612d259889ac4a","Developer","Luxuary","liquid","somyagupta746@gmail.com",9876543102,"India",87,53,"18:15:18 Wed Jan 12 2022",0

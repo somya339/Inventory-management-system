@@ -15,7 +15,8 @@ csvBtn.addEventListener("click", e => {
             csvBtn.href = "./datamaterial.csv";
             csvBtn.download = "datamaterial.csv"
             csvBtn.click();
-            return count++;
+            window.location.reload();
+            return count1++;
 
         } else {
             return console.log(result.message);

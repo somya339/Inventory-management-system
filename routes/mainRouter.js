@@ -37,5 +37,8 @@ Router.post('/deletesupplier/:_id', controller.postdeletesupplier);
 Router.post('/createcsv', controller.createCsv)
 // unlink csv from project structure after download
 Router.post('/cleardata', controller.removeCsv);
-
+// get data to sort 
+Router.post('/getData', controller.getData)
+// sortdata
+Router.post('/sorted', controller.sortTable)
 module.exports = Router;

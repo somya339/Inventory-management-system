@@ -7,6 +7,7 @@ const fs = require('fs');
 const {
     Parser
 } = require('json2csv');
+var globalMaterials = [];
 // import utilities
 const {
     cloudinary
@@ -51,10 +52,11 @@ exports.materials = (req, res) => {
                 msg: 'Error in getting details..'
             });
         } else {
-            var obj = materials;
+            globalMaterials = materials;
+            var obj = globalMaterials
             let url = await getURL(obj);
             res.render('material', {
-                obj: obj,
+                obj: globalMaterials,
                 url: url
             });
 
@@ -133,6 +135,7 @@ exports.postaddmaterial = async (req, res) => {
 }
 // update the material data
 exports.posteditmaterial = async (req, res) => {
+    console.log(req.file);
     var name = entities.encode(req.body.name);
     var price = entities.encode(req.body.price);
     var qty = entities.encode(req.body.qty);
@@ -171,6 +174,7 @@ exports.posteditmaterial = async (req, res) => {
                     msg: "Error Occured."
                 });
             }
+            res.redirect('/materials')
         });
     } catch (err) {
         console.log(err.message);
@@ -178,7 +182,6 @@ exports.posteditmaterial = async (req, res) => {
             success: false
         })
     }
-    res.redirect('/materials')
 };
 //delete the data of materials
 exports.postdeletematerial = (req, res) => {
@@ -402,5 +405,37 @@ exports.removeCsv = (req, res) => {
         res.send({
             status: "data cleared"
         })
+    });
+}
+
+exports.getData = async (req, res) => {
+    Material.find({}).then((result) => {
+        if (result != [] && result != null) {
+            // res.header({
+            //     "Content-Type": "application/octet"
+            // });
+
+            res.status(200).send({
+                result: result
+            })
+        } else {
+            res.status(201).send({
+                status: "empty"
+            })
+        }
+    }).catch((err) => {
+        return res.send({
+            err: err.message
+        })
+    });
+}
+
+exports.sortTable = async (req, res) => {
+    globalMaterials = req.body;
+    let url = await getURL(globalMaterials);
+    console.log(globalMaterials);
+    res.render('material', {
+        obj: globalMaterials,
+        url: url
     });
 }

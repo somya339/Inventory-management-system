@@ -15,7 +15,8 @@ csvBtn2.addEventListener("click", e => {
             csvBtn2.href = "./dataSupplier.csv";
             csvBtn2.download = "dataSupplier.csv"
             csvBtn2.click();
-            return count++;
+            window.location.reload();
+            return count2++;
 
         } else {
             return console.log(result.message);
